@@ -1,0 +1,7 @@
+spring:
+  jpa:
+    database-platform: org.hibernate.community.dialect.SQLiteDialect
+  datasource:
+    driver : org.sqlite.JDBC
+    driver-class-name: org.sqlite.JDBC
+    url: jdbc:sqlite:rooper.db
