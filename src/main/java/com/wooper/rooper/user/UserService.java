@@ -31,12 +31,11 @@ public class UserService {
         if(session != null){
             return "Fail : already login";
         }
-        System.out.println(loginVo.getUserId());
         Optional<User> user = userRepository.findByUserId(loginVo.getUserId());
         if(user.isPresent()){
             if(user.get().getPassword().equals(loginVo.getPassword())) {
                 session = request.getSession();
-                session.setAttribute("user", user.get());
+                session.setAttribute("user", user.get().getUserNo());
                 return "Success";
             }
             return "Fail : wrong password";

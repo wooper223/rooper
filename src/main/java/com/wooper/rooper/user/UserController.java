@@ -20,7 +20,6 @@ public class UserController {
 
     @PostMapping("/user/login")
     public String login(LoginVo loginVo, HttpServletRequest request){
-        System.out.println(loginVo.getUserId());
         return userService.login(loginVo, request);
     }
 
