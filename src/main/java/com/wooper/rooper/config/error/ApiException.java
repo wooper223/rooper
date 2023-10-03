@@ -6,12 +6,10 @@ import lombok.NoArgsConstructor;
 
 @Getter
 public class ApiException extends RuntimeException{
-    private String url;
     private ErrorCode error;
 
-    public ApiException(String url, ErrorCode e) {
+    public ApiException(ErrorCode e) {
         super(e.getErrorMessage());
-        this.url = url;
         this.error = e;
     }
 }

@@ -20,8 +20,7 @@ public class UserService {
     public ApiResult insertUser(UserVo userVo){
         Optional<User> user = userRepository.findByUserId(userVo.getUserId());
         if(user.isPresent()){
-            //return new ApiResult("Fail", "user/signin", "duplicated id");
-            throw new ApiException("user/signin", ErrorCode.DUPLICATE_LOGIN_ID);
+            throw new ApiException(ErrorCode.DUPLICATE_LOGIN_ID);
         } else {
             User newUser = new User(userVo.getUserId(), userVo.getPassword()
                     , userVo.getTelNo(), userVo.getEmail(), LocalDateTime.now());
@@ -33,7 +32,7 @@ public class UserService {
     public ApiResult login(LoginVo loginVo, HttpServletRequest request){
         HttpSession session = request.getSession(false);
         if(session != null){
-            return new ApiResult("Fail", "user/login", "already login");
+            throw new ApiException(ErrorCode.ALREADY_LOGGED_IN);
         }
         Optional<User> user = userRepository.findByUserId(loginVo.getUserId());
         if(user.isPresent()){
@@ -42,9 +41,9 @@ public class UserService {
                 session.setAttribute("user/login", user.get().getUserNo());
                 return new ApiResult("Success", "user/login", "login");
             }
-            return new ApiResult("Fail", "user/login", "wrong password");
+            throw new ApiException(ErrorCode.WRONG_PASSWORD);
         }
-        return new ApiResult("Fail", "user/login", "wrong id");
+        throw new ApiException(ErrorCode.ACCOUNT_NOT_FOUND);
     }
 
     public ApiResult logout(HttpServletRequest request){
@@ -53,7 +52,7 @@ public class UserService {
             session.invalidate();
             return new ApiResult("Success", "user/logout", "logout");
         } else {
-            return new ApiResult("Fail", "user/logout", "No Session");
+            throw new ApiException(ErrorCode.SESSION_EXPIRED);
         }
     }
 
