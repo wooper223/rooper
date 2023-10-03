@@ -14,18 +14,17 @@ public class UserController {
 
     @PostMapping("/user/signup")
     public String signup(@RequestBody UserVo userVo){
-        System.out.println(userVo.getUserId());
-        return userService.insertUser(userVo);
+        return userService.insertUser(userVo).toString();
     }
 
     @PostMapping("/user/login")
     public String login(LoginVo loginVo, HttpServletRequest request){
-        return userService.login(loginVo, request);
+        return userService.login(loginVo, request).toString();
     }
 
     @PostMapping("/user/logout")
     public String logout(HttpServletRequest request){
-        return userService.logout(request);
+        return userService.logout(request).toString();
     }
 
     @GetMapping("/user/allUserInfo")
