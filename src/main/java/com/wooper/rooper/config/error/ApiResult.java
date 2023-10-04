@@ -10,7 +10,7 @@ public class ApiResult {
     private String status;
     private String url;
     private String message;
-    private ApiException exception;
+    private ApiExceptionVo exception;
 
     public ApiResult(String status, String url, String message){
         this.status = status;
