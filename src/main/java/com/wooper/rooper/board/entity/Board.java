@@ -1,5 +1,6 @@
 package com.wooper.rooper.board.entity;
 
+import com.wooper.rooper.common.entity.BaseTimeEntity;
 import com.wooper.rooper.user.User;
 
 import jakarta.persistence.Entity;
@@ -11,7 +12,7 @@ import lombok.Getter;
 
 @Getter
 @Entity
-public class Board {
+public class Board extends BaseTimeEntity {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

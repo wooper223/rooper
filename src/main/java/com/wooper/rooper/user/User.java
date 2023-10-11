@@ -9,6 +9,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
+import com.wooper.rooper.common.entity.BaseTimeEntity;
+
 @Entity(name="user")
 @NoArgsConstructor
 @RequiredArgsConstructor
@@ -19,7 +21,7 @@ import java.time.LocalDateTime;
         initialValue = 0,
         allocationSize = 1
 )
-public class User {
+public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_SEQ_GENERATOR")
     @Column(name ="user_no")
