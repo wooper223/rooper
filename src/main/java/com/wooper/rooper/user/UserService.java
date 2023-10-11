@@ -1,5 +1,8 @@
 package com.wooper.rooper.user;
 
+import com.wooper.rooper.config.error.ApiException;
+import com.wooper.rooper.config.error.ApiResult;
+import com.wooper.rooper.config.error.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
@@ -14,42 +17,42 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
 
-    public String insertUser(UserVo userVo){
+    public ApiResult insertUser(UserVo userVo){
         Optional<User> user = userRepository.findByUserId(userVo.getUserId());
         if(user.isPresent()){
-            return "Fail";
+            throw new ApiException(ErrorCode.DUPLICATE_LOGIN_ID);
         } else {
             User newUser = new User(userVo.getUserId(), userVo.getPassword()
                     , userVo.getTelNo(), userVo.getEmail(), LocalDateTime.now());
             userRepository.save(newUser);
-            return "Success";
+            return new ApiResult("Success", "user/signin", "sign in");
         }
     }
 
-    public String login(LoginVo loginVo, HttpServletRequest request){
+    public ApiResult login(LoginVo loginVo, HttpServletRequest request){
         HttpSession session = request.getSession(false);
         if(session != null){
-            return "Fail : already login";
+            throw new ApiException(ErrorCode.ALREADY_LOGGED_IN);
         }
         Optional<User> user = userRepository.findByUserId(loginVo.getUserId());
         if(user.isPresent()){
             if(user.get().getPassword().equals(loginVo.getPassword())) {
                 session = request.getSession();
-                session.setAttribute("user", user.get().getUserNo());
-                return "Success";
+                session.setAttribute("user/login", user.get().getUserNo());
+                return new ApiResult("Success", "user/login", "login");
             }
-            return "Fail : wrong password";
+            throw new ApiException(ErrorCode.WRONG_PASSWORD);
         }
-        return "Fail : wrong id";
+        throw new ApiException(ErrorCode.ACCOUNT_NOT_FOUND);
     }
 
-    public String logout(HttpServletRequest request){
+    public ApiResult logout(HttpServletRequest request){
         HttpSession session = request.getSession(false);
         if(session != null){
             session.invalidate();
-            return "Success";
+            return new ApiResult("Success", "user/logout", "logout");
         } else {
-            return "Fail : No Session";
+            throw new ApiException(ErrorCode.SESSION_EXPIRED);
         }
     }
 
